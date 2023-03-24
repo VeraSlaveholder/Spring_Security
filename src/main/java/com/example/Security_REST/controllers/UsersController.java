@@ -1,15 +1,13 @@
 package com.example.Security_REST.controllers;
 
 
-import com.example.Security_REST.models.User;
+import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 
 @Controller
@@ -38,15 +36,15 @@ public class UsersController {
 
     @GetMapping("/new")
     public String newUser(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new Users());
         return "users/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user")@Valid User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("user") Users users, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "users/new";
-        usersService.save(user);
+        usersService.save(users);
         return "redirect:/users";
     }
 
@@ -57,10 +55,10 @@ public class UsersController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user")@Valid User user, BindingResult bindingResult) {
+    public String update(@ModelAttribute("user") Users users, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "users/edit";
-        usersService.update(user);
+        usersService.update(users);
         return "redirect:/users";
     }
 

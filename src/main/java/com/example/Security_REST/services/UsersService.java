@@ -1,18 +1,18 @@
 package com.example.Security_REST.services;
 
-
 import com.example.Security_REST.dao.UserDAO;
-import com.example.Security_REST.models.User;
+import com.example.Security_REST.models.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class UsersService {
+
+
     private final UserDAO userDAO;
 
 
@@ -22,31 +22,27 @@ public class UsersService {
 
     }
 
-    public List<User> findAll() {
+    public List<Users> findAll() {
         return userDAO.findAll();
     }
 
-    public User findOne(int id) {
+    public Users findOne(int id) {
         return userDAO.findById(id);
     }
 
     @Transactional
-    public void save(User user) {
-        userDAO.save(user);
+    public void save(Users users) {
+        userDAO.save(users);
     }
 
     @Transactional
-    public void update(User updatedUser) {
-        userDAO.update(updatedUser);
+    public void update(Users updatedUsers) {
+        userDAO.update(updatedUsers);
 
     }
 
     @Transactional
     public void delete(int id) {
         userDAO.delete(id);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userDAO.findByUsername(username);
     }
 }

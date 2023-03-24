@@ -1,15 +1,13 @@
 package com.example.Security_REST.dao;
 
 
-import com.example.Security_REST.models.User;
+import com.example.Security_REST.models.Users;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserDAO {
@@ -17,34 +15,31 @@ public class UserDAO {
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public List<User> findAll() {
-        return entityManager.createQuery("SELECT users FROM Users users", User.class).getResultList();
+    public List<Users> findAll() {
+        return entityManager.createQuery("SELECT users FROM Users users", Users.class).getResultList();
     }
 
     @Transactional(readOnly = true)
-    public User findById(int id) {
-        return entityManager.find(User.class, id);
+    public Users findById(int id) {
+        return entityManager.find(Users.class, id);
     }
 
     @Transactional
-    public void save(User user) {
+    public void save(Users user) {
         entityManager.persist(user);
         entityManager.close();
     }
 
     @Transactional
-    public void update(User updatedUser) {
+    public void update(Users updatedUser) {
         entityManager.merge(updatedUser);
     }
 
     @Transactional
     public void delete(int id) {
-        User user = entityManager.find(User.class, id);
+        Users user = entityManager.find(Users.class, id);
         if (user != null) {
             entityManager.remove(user);
         }
-    }
-    public Optional<User> findByUsername(String username) {
-        return Optional.ofNullable(entityManager.find(User.class, username));
     }
 }

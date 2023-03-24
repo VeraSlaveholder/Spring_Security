@@ -9,11 +9,11 @@
 <p th:text="${'Age: ' + user.getAge()}">VALUE</p>
 <br/>
 <hr/>
-<form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}">
+<form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
     <input type="submit" value="Edit"/>
 </form>
 
-<form th:method="DELETE" th:action="@{/user/{id}(id=${user.getId()})}">
+<form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
 </body>
