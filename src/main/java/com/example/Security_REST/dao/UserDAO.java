@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -41,5 +42,12 @@ public class UserDAO {
         if (user != null) {
             entityManager.remove(user);
         }
+    }
+
+    public Users findByUsername(String name) {
+        TypedQuery<Users> query = entityManager.createQuery("SELECT u FROM Users u WHERE u.name = :name", Users.class);
+        query.setParameter("name", name);
+        List<Users> users = query.getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
 }
