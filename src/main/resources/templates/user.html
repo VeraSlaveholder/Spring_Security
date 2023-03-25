@@ -7,5 +7,9 @@
 <body>
 <p th:text="${'Full name: '+ user.getName() + ' ' + user.getSurname()}">VALUE</p>
 <p th:text="${'Age: ' + user.getAge()}">VALUE</p>
+<br/>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout"/>
+</form>
 </body>
 </html>

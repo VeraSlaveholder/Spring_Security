@@ -48,6 +48,7 @@ public class UsersService implements UserDetailsService {
     public void delete(int id) {
         userDAO.delete(id);
     }
+
     @Transactional
     public Users findByUsername(String name) {
         return userDAO.findByUsername(name);

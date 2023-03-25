@@ -18,7 +18,6 @@ public class UsersController {
         this.userService = userService;
     }
 
-
     @GetMapping("/user")
     public String showUserByIdForUser(Principal principal, Model model) {
         String username = principal.getName();

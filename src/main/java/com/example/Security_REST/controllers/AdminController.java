@@ -1,6 +1,5 @@
 package com.example.Security_REST.controllers;
 
-
 import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
