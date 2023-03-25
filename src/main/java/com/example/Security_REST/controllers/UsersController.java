@@ -1,70 +1,29 @@
 package com.example.Security_REST.controllers;
 
-
 import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 
 @Controller
-@RequestMapping("/users")
 public class UsersController {
-
-    private final UsersService usersService;
-
+    private final UsersService userService;
 
     @Autowired
-    public UsersController(UsersService usersService) {
-        this.usersService = usersService;
+    public UsersController(UsersService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("users", usersService.findAll());
-        return "users/all";
-    }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", usersService.findOne(id));
-        return "users/show";
-    }
-
-    @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("user", new Users());
-        return "users/new";
-    }
-
-    @PostMapping()
-    public String create(@ModelAttribute("user") Users users, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "users/new";
-        usersService.save(users);
-        return "redirect:/users";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", usersService.findOne(id));
-        return "users/edit";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") Users users, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "users/edit";
-        usersService.update(users);
-        return "redirect:/users";
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        usersService.delete(id);
-        return "redirect:/users";
+    @GetMapping("/user")
+    public String showUserByIdForUser(Principal principal, Model model) {
+        String username = principal.getName();
+        Users user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+        return "user";
     }
 }

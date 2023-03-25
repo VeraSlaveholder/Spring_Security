@@ -5,9 +5,7 @@
     <title>User</title>
 </head>
 <body>
-<p th:text="'UserName: ' + ${user.getName() + ', age: ' + user.getAge()}">VALUE</p>
-<p th:text="'Password: ' + ${user.getPassword()}">VALUE</p>
-<p th:text="${'Email: ' + user.getEmail()}">VALUE</p>
-<p th:text="'UserID: ' + ${user.getId()}">VALUE</p>
+<p th:text="${'Full name: '+ user.getName() + ' ' + user.getSurname()}">VALUE</p>
+<p th:text="${'Age: ' + user.getAge()}">VALUE</p>
 </body>
 </html>
