@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Role")
@@ -15,16 +17,16 @@ public class Role implements GrantedAuthority {
     @NotEmpty(message = "Item name should not be empty")
     @Column(name = "roleName")
     private String roleName;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users owner;
 
-    public Users getOwner() {
-        return owner;
+    @ManyToMany(mappedBy = "roles")
+    private List<Users> usersList = new ArrayList<>();
+
+    public List<Users> getUsersList() {
+        return usersList;
     }
 
-    public void setOwner(Users owner) {
-        this.owner = owner;
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
     }
 
     public Role() {
