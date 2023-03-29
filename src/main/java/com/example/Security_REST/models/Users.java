@@ -34,10 +34,10 @@ public class Users implements UserDetails {
     @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String surname;
-    @Column(name = "email")
-    @NotEmpty(message = "Surname should not be empty")
-    @Email
-    private String email;
+//    @Column(name = "email")
+//    @NotEmpty(message = "Surname should not be empty")
+//    @Email
+//    private String email;
     @Column(name = "password")
     @NotEmpty(message = "password should not be empty")
     private String password;
@@ -49,21 +49,17 @@ public class Users implements UserDetails {
     public Users() {
     }
 
-    public Users(String name, int age, String surname, String email, String password) {
+    public Users(String name, int age, String surname, String password) {
         this.name = name;
         this.age = age;
         this.surname = surname;
-        this.email = email;
+      //  this.email = email;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+//    public String getEmail() {return email;}
+//
+//    public void setEmail(String email) {this.email = email;}
 
     public int getId() {
         return id;
@@ -116,7 +112,7 @@ public class Users implements UserDetails {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
-                ", email=" + email +
+//                ", email=" + email +
                 '}';
     }
 
