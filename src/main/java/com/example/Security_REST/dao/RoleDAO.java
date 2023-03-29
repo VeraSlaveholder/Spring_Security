@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface RoleDAO {
 
-    public Role getRoleByName(String name) ;
+    Role getRoleByName(String name);
 
-    public Role getDefaultRole();
+    Role getDefaultRole();
 
-    public Role getAdminRole();
+    Role getAdminRole();
 
-    public List<Role> listAllRoles() ;
+    List<Role> listAllRoles();
 }

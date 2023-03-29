@@ -5,11 +5,11 @@ import com.example.Security_REST.models.Role;
 import java.util.List;
 
 public interface RoleService {
-    public Role getRoleByName(String name) ;
+    Role getRoleByName(String name);
 
-    public Role getDefaultRole();
+    Role getDefaultRole();
 
-    public Role getAdminRole();
+    Role getAdminRole();
 
-    public List<Role> getAllRoles() ;
+    List<Role> getAllRoles();
 }
