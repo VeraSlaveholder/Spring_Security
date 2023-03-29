@@ -2,6 +2,7 @@ package com.example.Security_REST.controllers;
 
 import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.UsersService;
+import com.example.Security_REST.services.UsersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

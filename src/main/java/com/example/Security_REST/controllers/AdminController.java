@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") Users users,@RequestParam("selectedRole") String[] selectedRole,
+    public String create(@ModelAttribute("user") Users users, @RequestParam("selectedRole") String[] selectedRole,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "admin/new";
@@ -71,7 +71,7 @@ public class AdminController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
-                          @RequestParam("selectedRole") String[] selectedRole) {
+                         @RequestParam("selectedRole") String[] selectedRole) {
         if (bindingResult.hasErrors())
             return "admin/edit";
 

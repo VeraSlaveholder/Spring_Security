@@ -54,10 +54,7 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", roleName='" + roleName + '\'' +
-                '}';
+        return roleName;
     }
 
     @Override

@@ -4,6 +4,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -18,29 +22,48 @@ public class Users implements UserDetails {
     private int id;
 
     @Column(name = "name")
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     private String name;
 
     @Column(name = "age")
+    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
     @Column(name = "surname")
+    @NotEmpty(message = "Surname should not be empty")
+    @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String surname;
+    @Column(name = "email")
+    @NotEmpty(message = "Surname should not be empty")
+    @Email
+    private String email;
     @Column(name = "password")
+    @NotEmpty(message = "password should not be empty")
     private String password;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<>();
+
     public Users() {
     }
 
-    public Users(String name, int age, String surname, String password) {
+    public Users(String name, int age, String surname, String email, String password) {
         this.name = name;
         this.age = age;
         this.surname = surname;
+        this.email = email;
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -93,6 +116,7 @@ public class Users implements UserDetails {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
+                ", email=" + email +
                 '}';
     }
 
