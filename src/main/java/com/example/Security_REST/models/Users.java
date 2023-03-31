@@ -4,13 +4,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,12 +32,13 @@ public class Users implements UserDetails {
     @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String surname;
-//    @Column(name = "email")
+    //    @Column(name = "email")
 //    @NotEmpty(message = "Surname should not be empty")
 //    @Email
 //    private String email;
     @Column(name = "password")
     @NotEmpty(message = "password should not be empty")
+    @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String password;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
@@ -53,7 +52,7 @@ public class Users implements UserDetails {
         this.name = name;
         this.age = age;
         this.surname = surname;
-      //  this.email = email;
+        //  this.email = email;
         this.password = password;
     }
 

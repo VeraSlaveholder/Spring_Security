@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
@@ -57,7 +58,6 @@ public class AdminController {
                 users.getRoles().add(roleService.getAdminRole());
             }
         }
-
         usersService.save(users);
         return "redirect:/admin";
     }
@@ -90,5 +90,12 @@ public class AdminController {
     public String delete(@PathVariable("id") int id) {
         usersService.delete(id);
         return "redirect:/admin";
+    }
+    @GetMapping("/user")
+    public String showUserById(Principal principal, Model model) {
+        String username = principal.getName();
+        Users user = usersService.findByUsername(username);
+        model.addAttribute("user", user);
+        return "admin/user";
     }
 }
