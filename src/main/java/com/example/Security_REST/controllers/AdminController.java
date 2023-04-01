@@ -32,6 +32,7 @@ public class AdminController {
         Users user = usersService.findByUsername(username);
         model.addAttribute("admin", user);
         model.addAttribute("users", usersService.findAll());
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin/all";
     }
 
@@ -44,7 +45,7 @@ public class AdminController {
     @GetMapping("/new")
     public String newUser(@ModelAttribute("use") Users user, Model model) {
         model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/all";
+        return "admin/new";
     }
 
     @PostMapping()

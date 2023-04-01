@@ -105,6 +105,15 @@ public class Users implements UserDetails {
         this.roles = roles;
     }
 
+    public String rolesName(){
+        StringBuilder sb = new StringBuilder();
+        for (Role role : roles) {
+            if (role.toString().startsWith("ROLE_")) {
+            sb.append(role.toString().substring(5)).append(" ");}
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         return "User{" +
