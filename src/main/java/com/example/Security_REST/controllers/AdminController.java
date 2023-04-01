@@ -27,7 +27,10 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Principal principal,Model model) {
+        String username = principal.getName();
+        Users user = usersService.findByUsername(username);
+        model.addAttribute("admin", user);
         model.addAttribute("users", usersService.findAll());
         return "admin/all";
     }
@@ -39,9 +42,9 @@ public class AdminController {
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") Users user, Model model) {
+    public String newUser(@ModelAttribute("use") Users user, Model model) {
         model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/new";
+        return "admin/all";
     }
 
     @PostMapping()
