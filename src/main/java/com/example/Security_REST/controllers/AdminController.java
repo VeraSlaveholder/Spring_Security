@@ -1,16 +1,18 @@
 package com.example.Security_REST.controllers;
 
+import com.example.Security_REST.models.Role;
 import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.RoleService;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.*;
 
 
 @Controller
@@ -36,24 +38,11 @@ public class AdminController {
         return "admin/all";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", usersService.findOne(id));
-        return "admin/show";
-    }
-
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("use") Users user, Model model) {
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/new";
-    }
-
     @PostMapping()
-    public String create(@ModelAttribute("user") Users users, @RequestParam("selectedRole") String[] selectedRole,
-                         BindingResult bindingResult) {
+    public String create(@ModelAttribute("newUser") @Valid Users users,BindingResult bindingResult,
+                         @RequestParam("selectedRole") String[] selectedRole) {
         if (bindingResult.hasErrors())
-            return "admin/new";
-
+            return "redirect:/admin";
         for (String role : selectedRole
         ) {
             if (role.contains("ROLE_USER")) {
@@ -65,19 +54,11 @@ public class AdminController {
         usersService.save(users);
         return "redirect:/admin";
     }
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", usersService.findOne(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/edit";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
-                         @RequestParam("selectedRole") String[] selectedRole) {
-        if (bindingResult.hasErrors())
-            return "admin/edit";
+    @PatchMapping("/update")
+    public String updateUser(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
+                             @RequestParam("selectedRole") String[] selectedRole) {
+//        if (bindingResult.hasErrors())
+//            return "redirect:/admin";
 
         for (String role : selectedRole) {
             if (role.contains("ROLE_USER")) {
@@ -86,6 +67,7 @@ public class AdminController {
                 user.getRoles().add(roleService.getAdminRole());
             }
         }
+
         usersService.update(user);
         return "redirect:/admin";
     }
