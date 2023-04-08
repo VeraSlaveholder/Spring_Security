@@ -17,21 +17,25 @@ public class RoleServiceImpl implements RoleService {
         this.roleDAO = roleDAO;
     }
 
-    @Transactional
-    public Role getRoleByName(String name) {
-        return roleDAO.getRoleByName(name);
-    }
 
-    public Role getDefaultRole() {
-        return roleDAO.getDefaultRole();
-    }
-
-    public Role getAdminRole() {
-        return roleDAO.getAdminRole();
-    }
-
+    @Override
     public List<Role> getAllRoles() {
-        return roleDAO.listAllRoles();
+        return roleDAO.getAllRoles();
     }
 
+    @Override
+    public Role getRole(String userRole) {
+        return roleDAO.getRole(userRole);
+    }
+
+    @Override
+    public Role getRoleById(int id) {
+        return roleDAO.getRoleById(id);
+    }
+
+    @Override
+    @Transactional
+    public void addRole(Role role) {
+        roleDAO.addRole(role);
+    }
 }

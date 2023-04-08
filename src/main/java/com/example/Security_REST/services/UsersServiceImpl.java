@@ -3,9 +3,11 @@ package com.example.Security_REST.services;
 import com.example.Security_REST.dao.UserDAO;
 import com.example.Security_REST.models.Users;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +17,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UsersServiceImpl implements UserDetailsService, UsersService {
     private final UserDAO userDAO;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsersServiceImpl(UserDAO userDAO) {
+    @Lazy
+    public UsersServiceImpl(UserDAO userDAO, PasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
-
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Users> findAll() {
@@ -31,13 +35,17 @@ public class UsersServiceImpl implements UserDetailsService, UsersService {
     }
 
     @Transactional
-    public void save(Users users) {
-        userDAO.save(users);
+    public void save(Users user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDAO.save(user);
     }
 
     @Transactional
-    public void update(Users updatedUsers) {
-        userDAO.update(updatedUsers);
+    public void update(Users updatedUser) {
+        if (!updatedUser.getPassword().equals(userDAO.findById(updatedUser.getId()).getPassword())) {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+        userDAO.update(updatedUser);
 
     }
 
@@ -53,12 +61,6 @@ public class UsersServiceImpl implements UserDetailsService, UsersService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-
-        Users user = userDAO.findByUsername(name);
-        if (user == null) {
-            throw new UsernameNotFoundException("Unknown user: " + name);
-        }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), user.getAuthorities());
+        return userDAO.findByUsername(name);
     }
 }

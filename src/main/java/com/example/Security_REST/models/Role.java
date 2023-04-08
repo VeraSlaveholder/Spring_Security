@@ -6,9 +6,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "Role")
+@Table(name = "Roles")
 public class Role implements GrantedAuthority {
     @Id
     @Column(name = "id")
@@ -19,14 +20,14 @@ public class Role implements GrantedAuthority {
     private String roleName;
 
     @ManyToMany(mappedBy = "roles")
-    private List<Users> usersList = new ArrayList<>();
+    private Set<Users> usersSet ;
 
-    public List<Users> getUsersList() {
-        return usersList;
+    public Set<Users> getUsersSet() {
+        return usersSet;
     }
 
-    public void setUsersList(List<Users> usersList) {
-        this.usersList = usersList;
+    public void setUsersList(Set<Users> usersSet) {
+        this.usersSet = usersSet;
     }
 
     public Role() {

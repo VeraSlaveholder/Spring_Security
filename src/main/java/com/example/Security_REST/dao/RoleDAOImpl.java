@@ -13,24 +13,25 @@ public class RoleDAOImpl implements RoleDAO{
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
+    public List<Role> getAllRoles() {
+        return entityManager.createQuery("select r from Role r", Role.class).getResultList();
+    }
+
+    @Override
+    public Role getRole(String roleName) {
+        return entityManager.createQuery("select r from Role r where r.roleName =: roleName", Role.class)
+                .setParameter("roleName", roleName).getSingleResult();
+    }
+
+    @Override
+    public Role getRoleById(int id) {
+        return entityManager.find(Role.class, id);
+    }
+
+    @Override
     @Transactional
-    public Role getRoleByName(String name) {
-        return entityManager.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
-                .setParameter("roleName", name)
-                .setMaxResults(1)
-                .getSingleResult();
-    }
-
-    public Role getDefaultRole() {
-        return getRoleByName("ROLE_USER");
-    }
-
-    public Role getAdminRole() {
-        return getRoleByName("ROLE_ADMIN");
-    }
-
-    public List<Role> listAllRoles() {
-        return entityManager.createQuery("from Role", Role.class
-        ).getResultList();
+    public void addRole(Role role) {
+        entityManager.persist(role);
     }
 }

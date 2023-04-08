@@ -1,5 +1,7 @@
 package com.example.Security_REST.models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -42,19 +44,23 @@ public class Users implements UserDetails {
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "roleid"))
     private Set<Role> roles = new HashSet<>();
 
     public Users() {
     }
 
-    public Users(String name, int age, String surname,String email, String password) {
+    public Users(String name, int age, String surname,String email, String password,Set<Role> roles) {
         this.name = name;
         this.age = age;
         this.surname = surname;
-          this.email = email;
+        this.email = email;
         this.password = password;
+        this.roles = roles;
     }
 
     public String getEmail() {return email;}

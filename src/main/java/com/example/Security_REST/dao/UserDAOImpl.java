@@ -27,7 +27,6 @@ public class UserDAOImpl implements UserDAO{
     @Transactional
     public void save(Users user) {
         entityManager.persist(user);
-        entityManager.close();
     }
 
     @Transactional
@@ -38,15 +37,11 @@ public class UserDAOImpl implements UserDAO{
     @Transactional
     public void delete(int id) {
         Users user = entityManager.find(Users.class, id);
-        if (user != null) {
-            entityManager.remove(user);
-        }
+        entityManager.remove(user);
     }
-
+    @Override
     public Users findByUsername(String name) {
-        TypedQuery<Users> query = entityManager.createQuery("SELECT u FROM Users u WHERE u.name = :name", Users.class);
-        query.setParameter("name", name);
-        List<Users> users = query.getResultList();
-        return users.isEmpty() ? null : users.get(0);
+        return entityManager.createQuery("select u from Users u where u.name =: name", Users.class)
+                .setParameter("name", name).getSingleResult();
     }
 }

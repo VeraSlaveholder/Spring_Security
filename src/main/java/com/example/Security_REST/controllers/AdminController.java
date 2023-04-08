@@ -6,13 +6,16 @@ import com.example.Security_REST.services.RoleService;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -29,59 +32,45 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String index(Principal principal,Model model) {
-        String username = principal.getName();
-        Users user = usersService.findByUsername(username);
-        model.addAttribute("admin", user);
+    public String index(@AuthenticationPrincipal Users user, Model model) {
         model.addAttribute("users", usersService.findAll());
+        model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllRoles());
+//        model.addAttribute("use", user);
         return "admin/all";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("newUser") @Valid Users users,BindingResult bindingResult,
-                         @RequestParam("selectedRole") String[] selectedRole) {
-        if (bindingResult.hasErrors())
-            return "redirect:/admin";
-        for (String role : selectedRole
-        ) {
-            if (role.contains("ROLE_USER")) {
-                users.getRoles().add(roleService.getDefaultRole());
-            } else if (role.contains("ROLE_ADMIN")) {
-                users.getRoles().add(roleService.getAdminRole());
-            }
-        }
-        usersService.save(users);
-        return "redirect:/admin";
+    public String create(@ModelAttribute("use") Users user) {
+        getUserRoles(user);
+        usersService.save(user);return "redirect:/admin";
     }
-    @PatchMapping("/update")
-    public String updateUser(@ModelAttribute("user") @Valid Users user, BindingResult bindingResult,
-                             @RequestParam("selectedRole") String[] selectedRole) {
-//        if (bindingResult.hasErrors())
-//            return "redirect:/admin";
 
-        for (String role : selectedRole) {
-            if (role.contains("ROLE_USER")) {
-                user.getRoles().add(roleService.getDefaultRole());
-            } else if (role.contains("ROLE_ADMIN")) {
-                user.getRoles().add(roleService.getAdminRole());
-            }
-        }
-
+    @PutMapping("/{id}/update")
+    public String updateUser(@ModelAttribute("user") Users user, Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
+        getUserRoles(user);
         usersService.update(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") int id) {
         usersService.delete(id);
         return "redirect:/admin";
     }
+
     @GetMapping("/user")
     public String showUserById(Principal principal, Model model) {
         String username = principal.getName();
         Users user = usersService.findByUsername(username);
         model.addAttribute("user", user);
         return "admin/user";
+    }
+
+    private void getUserRoles(Users user) {
+        user.setRoles(user.getRoles().stream()
+                .map(role -> roleService.getRole(role.getRoleName()))
+                .collect(Collectors.toSet()));
     }
 }
