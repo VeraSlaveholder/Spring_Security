@@ -39,7 +39,7 @@ public class DBInit {
 
         Users newUser = new Users("user", 23, "Ivanov", "ivan@mail.com",
                 "user", userSet);
-        Users admin = new Users("aa", 30,"Potter",  "garry@gmail.com",
+        Users admin = new Users("aa", 30, "Potter", "garry@gmail.com",
                 "aa", adminSet);
 
         userService.save(newUser);

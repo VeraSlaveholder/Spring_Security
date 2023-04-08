@@ -1,20 +1,15 @@
 package com.example.Security_REST.controllers;
 
-import com.example.Security_REST.models.Role;
 import com.example.Security_REST.models.Users;
 import com.example.Security_REST.services.RoleService;
 import com.example.Security_REST.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.Principal;
-import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,17 +28,17 @@ public class AdminController {
 
     @GetMapping()
     public String index(@AuthenticationPrincipal Users user, Model model) {
-        model.addAttribute("users", usersService.findAll());
         model.addAttribute("user", user);
+        model.addAttribute("users", usersService.findAll());
         model.addAttribute("roles", roleService.getAllRoles());
-//        model.addAttribute("use", user);
         return "admin/all";
     }
 
     @PostMapping()
     public String create(@ModelAttribute("use") Users user) {
         getUserRoles(user);
-        usersService.save(user);return "redirect:/admin";
+        usersService.save(user);
+        return "redirect:/admin";
     }
 
     @PutMapping("/{id}/update")

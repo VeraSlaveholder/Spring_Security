@@ -54,7 +54,7 @@ public class Users implements UserDetails {
     public Users() {
     }
 
-    public Users(String name, int age, String surname,String email, String password,Set<Role> roles) {
+    public Users(String name, int age, String surname, String email, String password, Set<Role> roles) {
         this.name = name;
         this.age = age;
         this.surname = surname;
@@ -63,9 +63,13 @@ public class Users implements UserDetails {
         this.roles = roles;
     }
 
-    public String getEmail() {return email;}
+    public String getEmail() {
+        return email;
+    }
 
-    public void setEmail(String email) {this.email = email;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -111,11 +115,12 @@ public class Users implements UserDetails {
         this.roles = roles;
     }
 
-    public String rolesName(){
+    public String rolesName() {
         StringBuilder sb = new StringBuilder();
         for (Role role : roles) {
             if (role.toString().startsWith("ROLE_")) {
-            sb.append(role.toString().substring(5)).append(" ");}
+                sb.append(role.toString().substring(5)).append(" ");
+            }
         }
         return sb.toString();
     }

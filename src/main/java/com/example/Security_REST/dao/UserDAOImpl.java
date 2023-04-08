@@ -6,11 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -39,6 +38,7 @@ public class UserDAOImpl implements UserDAO{
         Users user = entityManager.find(Users.class, id);
         entityManager.remove(user);
     }
+
     @Override
     public Users findByUsername(String name) {
         return entityManager.createQuery("select u from Users u where u.name =: name", Users.class)
