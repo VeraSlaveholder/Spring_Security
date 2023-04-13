@@ -1,5 +1,6 @@
 package com.example.Security_REST.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -17,16 +18,17 @@ public class Role implements GrantedAuthority {
     @Column(name = "roleName")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<Users> usersSet ;
+//    @JsonIgnore
 
-    public Set<Users> getUsersSet() {
-        return usersSet;
-    }
 
-    public void setUsersList(Set<Users> usersSet) {
-        this.usersSet = usersSet;
-    }
+
+//    public Set<Users> getUsersSet() {
+//        return usersSet;
+//    }
+//
+//    public void setUsersList(Set<Users> usersSet) {
+//        this.usersSet = usersSet;
+//    }
 
     public Role() {
     }

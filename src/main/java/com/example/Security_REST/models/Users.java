@@ -1,18 +1,15 @@
 package com.example.Security_REST.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.validation.constraints.*;
+import java.util.*;
 
 @Entity
 @Table(name = "Users")
@@ -20,21 +17,22 @@ public class Users implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int userId;
 
     @Column(name = "name")
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     private String name;
 
-    @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
-    private int age;
-
     @Column(name = "surname")
     @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String surname;
+
+    @Column(name = "age")
+    @Min(value = 0, message = "Age should be greater than 0")
+    private int age;
+
     @Column(name = "email")
     @NotEmpty(message = "Surname should not be empty")
     @Email
@@ -44,6 +42,11 @@ public class Users implements UserDetails {
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String password;
 
+    @NotEmpty(message = "Username cannot be empty")
+    @Pattern(regexp = "[A-Za-z]{2,15}", message = "Name should be between 2 and 15 latin characters without space")
+    @Size(min = 2, max = 15, message = "Username should be between 2 and 15 latin characters")
+    @Column(unique = true)
+    private String username;
     @ManyToMany(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinTable(name = "users_roles",
@@ -54,13 +57,26 @@ public class Users implements UserDetails {
     public Users() {
     }
 
-    public Users(String name, int age, String surname, String email, String password, Set<Role> roles) {
+    public Users(String name, String surname, int age, String email, String password, Set<Role> roles, String username) {
         this.name = name;
         this.age = age;
         this.surname = surname;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.username=username;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -72,11 +88,11 @@ public class Users implements UserDetails {
     }
 
     public int getId() {
-        return id;
+        return userId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public String getName() {
@@ -128,7 +144,7 @@ public class Users implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
@@ -138,7 +154,13 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        Set<Role> roles = getRoles();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        return authorities;
     }
 
     @Override

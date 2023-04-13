@@ -1,6 +1,7 @@
 package com.example.Security_REST.dao;
 
 import com.example.Security_REST.models.Role;
+import com.example.Security_REST.models.Users;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,4 +35,5 @@ public class RoleDAOImpl implements RoleDAO {
     public void addRole(Role role) {
         entityManager.persist(role);
     }
+
 }

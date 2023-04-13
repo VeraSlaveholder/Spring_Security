@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -38,4 +40,9 @@ public class RoleServiceImpl implements RoleService {
     public void addRole(Role role) {
         roleDAO.addRole(role);
     }
+//    @PostConstruct
+//    public void addDefaultRole() {
+//        roleDAO.addRole(new Role("ROLE_USER"));
+//        roleDAO.addRole(new Role("ROLE_ADMIN"));
+//    }
 }
