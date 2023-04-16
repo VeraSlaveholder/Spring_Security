@@ -1,16 +1,17 @@
-package com.example.Security_REST.controllers;
+package com.example.Security_REST.controller;
 
 import com.example.Security_REST.Exception.ExceptionInfo;
 import com.example.Security_REST.Exception.UserUsernameExistException;
-import com.example.Security_REST.models.Users;
-import com.example.Security_REST.services.RoleService;
-import com.example.Security_REST.services.UsersService;
+import com.example.Security_REST.model.User;
+import com.example.Security_REST.service.RoleService;
+import com.example.Security_REST.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -21,20 +22,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class RestApiController {
 
-    private final UsersService userService;
+    private final UserService userService;
 
     @Autowired
-    public RestApiController(RoleService roleService, UsersService userService) {
+    public RestApiController(RoleService roleService, UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<Users>> getUsers() {
-        return new ResponseEntity<>(userService.findAll(),HttpStatus.OK);
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<ExceptionInfo> createUser(@Valid @RequestBody Users user, BindingResult bindingResult) {
+    public ResponseEntity<ExceptionInfo> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String error = getErrorsFromBindingResult(bindingResult);
             return new ResponseEntity<>(new ExceptionInfo(error), HttpStatus.BAD_REQUEST);
@@ -42,49 +43,47 @@ public class RestApiController {
         try {
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (UserUsernameExistException u) {
+        } catch (UserUsernameExistException u) {
             throw new UserUsernameExistException("User with username exist");
         }
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ExceptionInfo> pageDelete(@PathVariable("id") int id) {
-        userService.delete(id);
+        userService.deleteById(id);
         return new ResponseEntity<>(new ExceptionInfo("User deleted"), HttpStatus.OK);
     }
 
     @GetMapping("users/{id}")
-    public ResponseEntity<Users> getUser (@PathVariable("id") int id) {
-        Users user = userService.findOne(id);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+        User user = userService.getById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Users> getUserByUsername (Principal principal) {
-        Users user = userService.findByUsername(principal.getName());
-        return new ResponseEntity<>(user,HttpStatus.OK);
+    public ResponseEntity<User> getUserByUsername(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<ExceptionInfo> pageEdit(@PathVariable("id") int id,
-                         @Valid @RequestBody Users user,
-                         BindingResult bindingResult) {
+                                                  @Valid @RequestBody User user,
+                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String error = getErrorsFromBindingResult(bindingResult);
             return new ResponseEntity<>(new ExceptionInfo(error), HttpStatus.BAD_REQUEST);
         }
         try {
-            String oldPassword = userService.findOne(id).getPassword();
+            String oldPassword = userService.getById(id).getPassword();
             if (oldPassword.equals(user.getPassword())) {
-                System.out.println("TRUE");
                 user.setPassword(oldPassword);
                 userService.update(user);
             } else {
-                System.out.println("FALSE");
                 userService.save(user);
             }
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (UserUsernameExistException u) {
+        } catch (UserUsernameExistException u) {
             throw new UserUsernameExistException("User with username exist");
         }
     }

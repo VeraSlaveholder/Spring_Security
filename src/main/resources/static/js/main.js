@@ -37,7 +37,7 @@ async function infoUser() {
         .then(user => {
             temp += `
              <span style="color: white">
-               ${user.username} with roles <span>${user.roles.map(e => " " + e.role.substr(5))}</span>
+               ${user.email} with roles: <span>${user.roles.map(e => " " + e.role.substr(5))}</span>
                 </div>
             </span>
                 </tr>

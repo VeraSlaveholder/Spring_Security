@@ -6,9 +6,9 @@ async function deleteUser(modal, id) {
 
     let deleteButton = `<button  class="btn btn-danger" id="deleteButton">Delete</button>`;
     let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
-    modal.find('.modal-footer').append(deleteButton);
-    modal.find('.modal-footer').append(closeButton);
 
+    modal.find('.modal-footer').append(closeButton);
+    modal.find('.modal-footer').append(deleteButton);
     user.then(user => {
         let bodyForm = `
             <form class="form-group text-center" id="deleteUser">
@@ -17,18 +17,13 @@ async function deleteUser(modal, id) {
                     <input type="text" class="form-control username" id="userId" value="${user.userId}" readonly>
                </div>
                    
-               <div class="form-group">
-                    <label for="username" class="col-form-label">Username</label>
-                    <input type="text" class="form-control username" id="username" value="${user.username}" readonly>
-               </div>
-
                 <div class="form-group">
-                    <label for="name" class="com-form-label">Name</label>
+                    <label for="name" class="com-form-label">First name</label>
                     <input type="text" class="form-control" id="name" value="${user.name}" readonly>
                 </div>
 
                 <div class="form-group">
-                    <label for="surname" class="com-form-label">Surname</label>
+                    <label for="surname" class="com-form-label">Last name</label>
                     <input type="text" class="form-control" id="surname" value="${user.surname}" readonly>
                 </div>
 

@@ -4,10 +4,10 @@ async function editUser(modal, id) {
 
     modal.find('.modal-title').html('Edit user');
 
+    let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`;
     let editButton = `<button  class="btn btn-info" id="editButton">Edit</button>`;
-    let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
-    modal.find('.modal-footer').append(editButton);
     modal.find('.modal-footer').append(closeButton);
+    modal.find('.modal-footer').append(editButton);
 
     user.then(user => {
         let bodyForm = `
@@ -16,24 +16,14 @@ async function editUser(modal, id) {
                     <label for="userId" class="col-form-label">ID</label>
                     <input type="text" class="form-control username" id="userId" value="${user.userId}" readonly>
                </div>
-                   
-               <div class="form-group">
-                    <label for="username" class="col-form-label">Username</label>
-                    <input type="text" class="form-control username" id="username" value="${user.username}">
-               </div>
-
+               
                 <div class="form-group">
-                    <label for="password" class="com-form-label">Password</label>
-                    <input type="password" class="form-control" id="password" value="${user.password}">
-                </div>
-
-                <div class="form-group">
-                    <label for="name" class="com-form-label">Name</label>
+                    <label for="name" class="com-form-label">First name</label>
                     <input type="text" class="form-control" id="name" value="${user.name}">
                 </div>
 
                 <div class="form-group">
-                    <label for="surname" class="com-form-label">Surname</label>
+                    <label for="surname" class="com-form-label">Last name</label>
                     <input type="text" class="form-control" id="surname" value="${user.surname}">
                 </div>
 
@@ -45,6 +35,11 @@ async function editUser(modal, id) {
                 <div class="form-group">
                     <label for="email" class="com-form-label">Email</label>
                     <input type="text" class="form-control" id="email" value="${user.email}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="com-form-label">Password</label>
+                    <input type="password" class="form-control" id="password" value="${user.password}">
                 </div>
                 
                 <div class="form-group">
@@ -71,7 +66,6 @@ async function editUser(modal, id) {
             return array;
         }
         let userId = modal.find("#userId").val().trim();
-        let username = modal.find("#username").val().trim();
         let password = modal.find("#password").val().trim();
         let name = modal.find("#name").val().trim();
         let surname = modal.find("#surname").val().trim();
@@ -79,7 +73,6 @@ async function editUser(modal, id) {
         let email = modal.find("#email").val().trim();
         let data = {
             userId: userId,
-            username: username,
             password: password,
             name: name,
             surname: surname,
