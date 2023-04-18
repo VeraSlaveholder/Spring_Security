@@ -6,22 +6,16 @@ import com.example.Security_REST.DAO.UserDAO;
 import com.example.Security_REST.DAO.UserDAOImpl;
 import com.example.Security_REST.model.Role;
 import com.example.Security_REST.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Transactional
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
     private final RoleDAO roleDAO;
@@ -68,16 +62,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByUsername(String username) {
         return userDAO.findByUsername(username);
-    }
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        try {
-            return userDAO.findByUsername(s);
-        } catch (UsernameNotFoundException u) {
-            throw new UsernameNotFoundException("user not found");
-        }
     }
 
     @Override

@@ -9,6 +9,10 @@ public class ExceptionInfo {
 
     private String info;
 
+    public String getInfo() {
+        return info;
+    }
+
     public ExceptionInfo() {
     }
 
@@ -16,7 +20,5 @@ public class ExceptionInfo {
         this.info = info;
     }
 
-    public String getInfo() {
-        return info;
-    }
+
 }

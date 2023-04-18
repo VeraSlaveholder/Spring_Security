@@ -1,4 +1,4 @@
-package com.example.Security_REST.security;
+package com.example.Security_REST.service;
 
 import com.example.Security_REST.DAO.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String s) {
         try {
             return userDAO.findByUsername(s);
         } catch (UsernameNotFoundException u) {

@@ -6,4 +6,7 @@ public class UserUsernameExistException extends DataIntegrityViolationException 
     public UserUsernameExistException(String msg) {
         super(msg);
     }
+    public UserUsernameExistException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

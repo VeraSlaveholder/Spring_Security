@@ -4,7 +4,6 @@ import com.example.Security_REST.model.Role;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class RoleDAOImpl implements RoleDAO{
+@Transactional
+public class RoleDAOImpl implements RoleDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -29,7 +29,6 @@ public class RoleDAOImpl implements RoleDAO{
         return new HashSet<>(resultList);
     }
 
-    @Transactional
     public void addRole(Role role) {
         entityManager.persist(role);
     }

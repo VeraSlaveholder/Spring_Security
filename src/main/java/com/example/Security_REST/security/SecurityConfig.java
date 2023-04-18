@@ -1,5 +1,6 @@
 package com.example.Security_REST.security;
 
+import com.example.Security_REST.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

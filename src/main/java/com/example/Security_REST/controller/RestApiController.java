@@ -43,15 +43,15 @@ public class RestApiController {
         try {
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (UserUsernameExistException u) {
-            throw new UserUsernameExistException("User with username exist");
+        } catch (Exception e) {
+            throw new UserUsernameExistException("User with username exist",e);
         }
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ExceptionInfo> pageDelete(@PathVariable("id") int id) {
         userService.deleteById(id);
-        return new ResponseEntity<>(new ExceptionInfo("User deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("users/{id}")
@@ -83,8 +83,8 @@ public class RestApiController {
                 userService.save(user);
             }
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (UserUsernameExistException u) {
-            throw new UserUsernameExistException("User with username exist");
+        } catch (Exception e) {
+            throw new UserUsernameExistException("User with username exist",e);
         }
     }
 
