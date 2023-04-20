@@ -5,8 +5,6 @@ import com.example.Security_REST.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,12 +24,12 @@ public class RoleServiceImpl implements RoleService {
         return roleDAO.findAllRoles();
     }
 
-    @Override
-    @PostConstruct
-    public void addDefaultRole() {
-        roleDAO.addRole(new Role("ROLE_USER"));
-        roleDAO.addRole(new Role("ROLE_ADMIN"));
-    }
+//    @Override
+//    @PostConstruct
+//    public void addDefaultRole() {
+//        roleDAO.addRole(new Role("ROLE_USER"));
+//        roleDAO.addRole(new Role("ROLE_ADMIN"));
+//    }
 
     @Override
     public Set<Role> findByIdRoles(List<Integer> roles) {

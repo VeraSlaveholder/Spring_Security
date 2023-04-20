@@ -1,7 +1,5 @@
 package com.example.Security_REST.DAO;
 
-
-
 import com.example.Security_REST.model.User;
 
 import java.util.List;
@@ -17,5 +15,5 @@ public interface UserDAO {
 
     User findByUsername(String name);
 
-    void update(User updatedUser);
+    void update(User user);
 }

@@ -2,7 +2,9 @@ package com.example.Security_REST.service;
 
 
 import com.example.Security_REST.model.User;
+import org.springframework.validation.BindingResult;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
@@ -15,11 +17,13 @@ public interface UserService {
 
     void deleteById(int id);
 
-    User findByUsername(String username);
+    User findByUsername(Principal principal);
 
-    void addDefaultUser();
+//    void addDefaultUser();
 
-    void update(User user);
+    void update(int id, User user);
 
     User passwordCoder(User user);
+
+    String getErrorsFromBindingResult(BindingResult bindingResult);
 }

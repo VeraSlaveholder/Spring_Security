@@ -6,17 +6,14 @@ import com.example.Security_REST.model.User;
 import com.example.Security_REST.service.RoleService;
 import com.example.Security_REST.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -37,14 +34,14 @@ public class RestApiController {
     @PostMapping("/users")
     public ResponseEntity<ExceptionInfo> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            String error = getErrorsFromBindingResult(bindingResult);
+            String error = userService.getErrorsFromBindingResult(bindingResult);
             return new ResponseEntity<>(new ExceptionInfo(error), HttpStatus.BAD_REQUEST);
         }
         try {
             userService.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            throw new UserUsernameExistException("User with username exist",e);
+            throw new UserUsernameExistException("User with username exist", e);
         }
     }
 
@@ -62,7 +59,7 @@ public class RestApiController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getUserByUsername(Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+        User user = userService.findByUsername(principal);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -71,27 +68,14 @@ public class RestApiController {
                                                   @Valid @RequestBody User user,
                                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            String error = getErrorsFromBindingResult(bindingResult);
+            String error = userService.getErrorsFromBindingResult(bindingResult);
             return new ResponseEntity<>(new ExceptionInfo(error), HttpStatus.BAD_REQUEST);
         }
         try {
-            String oldPassword = userService.getById(id).getPassword();
-            if (oldPassword.equals(user.getPassword())) {
-                user.setPassword(oldPassword);
-                userService.update(user);
-            } else {
-                userService.save(user);
-            }
+            userService.update(id, user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            throw new UserUsernameExistException("User with username exist",e);
+            throw new UserUsernameExistException("User with username exist", e);
         }
-    }
-
-    private String getErrorsFromBindingResult(BindingResult bindingResult) {
-        return bindingResult.getFieldErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining("; "));
     }
 }
