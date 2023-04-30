@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users_roles
+      author: Vera
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+                - column:
+                    name: user_id
+                    type: bigint
+                    constraints:
+                      primaryKey: true
+                      foreignKeyName: user_fk
+                      references: user(user_id)
+                - column:
+                    name: role_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      foreignKeyName: role_fk
+                      references: role(id)
