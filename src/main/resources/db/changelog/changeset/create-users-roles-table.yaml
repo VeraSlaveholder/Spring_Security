@@ -12,7 +12,7 @@ databaseChangeLog:
                     constraints:
                       primaryKey: true
                       foreignKeyName: user_fk
-                      references: user(user_id)
+                      references: users(user_id)
                 - column:
                     name: role_id
                     type: int
