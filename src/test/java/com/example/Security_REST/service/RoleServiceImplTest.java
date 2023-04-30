@@ -36,8 +36,8 @@ class RoleServiceImplTest {
     }
     @Test
     void findByIdRoles() {
-        Role role1=new Role(1, "ROLE_ADMIN");
-        Role role2=new Role(2, "ROLE_USER");
+        Role role1=new Role( "ROLE_ADMIN");
+        Role role2=new Role( "ROLE_USER");
 
         Set<Role> roles = new HashSet<>();
 
