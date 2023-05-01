@@ -1,7 +1,6 @@
 package com.example.Security_REST.service;
 
-import com.example.Security_REST.DAO.RoleDAOImpl;
-import com.example.Security_REST.DAO.UserDAOImpl;
+import com.example.Security_REST.DAO.UserRepository;
 import com.example.Security_REST.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,22 +21,20 @@ class UserServiceImplTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private UserDAOImpl userDAO;
-    @Mock
-    private RoleDAOImpl roleDAO;
+    private UserRepository userRepository;
 
     private UserService userService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userDAO, roleDAO, passwordEncoder);
+        userService = new UserServiceImpl(userRepository, passwordEncoder);
     }
 
     @Test
     public void findAll() {
         List<User> usersFromMock = new ArrayList<>();
-        Mockito.when(userDAO.findAll()).thenReturn(usersFromMock);
+        Mockito.when(userRepository.findAll()).thenReturn(usersFromMock);
         List<User> users = userService.findAll();
         assertEquals(users, usersFromMock);
     }
@@ -47,7 +44,7 @@ class UserServiceImplTest {
         int entityId = 123;
         User expectedUser = new User();
         expectedUser.setUserId(entityId);
-        when(userDAO.getById(entityId)).thenReturn(expectedUser);
+        when(userRepository.getUserByUserId(entityId)).thenReturn(expectedUser);
 
         User actualUser = userService.getById(entityId);
         assertEquals(expectedUser, actualUser);
@@ -65,10 +62,10 @@ class UserServiceImplTest {
         userService.save(user);
 
         verify(passwordEncoder, times(1)).encode("password");
-        verify(userDAO, times(1)).save(argThat(savedUser -> savedUser.getName().equals("user") &&
+        verify(userRepository, times(1)).save(argThat(savedUser -> savedUser.getName().equals("user") &&
                 (savedUser.getAge() == 12) &&
                 savedUser.getPassword().equals("encodedPassword")));
-        verifyNoMoreInteractions(passwordEncoder, userDAO);
+        verifyNoMoreInteractions(passwordEncoder, userRepository);
     }
 
 
@@ -77,8 +74,8 @@ class UserServiceImplTest {
         int id = 1;
         userService.deleteById(id);
 
-        verify(userDAO, times(1)).deleteById(id);
-        verifyNoMoreInteractions(userDAO);
+        verify(userRepository, times(1)).deleteByUserId(id);
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test
@@ -89,12 +86,12 @@ class UserServiceImplTest {
 
         User expectedUser = new User();
         expectedUser.setName(username);
-        when(userDAO.findByUsername(username)).thenReturn(expectedUser);
+        when(userRepository.findByName(username)).thenReturn(expectedUser);
 
         User actualUser = userService.findByUsername(principal);
 
-        verify(userDAO, times(1)).findByUsername(username);
-        verifyNoMoreInteractions(userDAO);
+        verify(userRepository, times(1)).findByName(username);
+        verifyNoMoreInteractions(userRepository);
 
         assertNotNull(actualUser);
         assertEquals(expectedUser.getUsername(), actualUser.getUsername());
@@ -104,7 +101,7 @@ class UserServiceImplTest {
     public void findByUsernameWithNullPrincipal() {
         User actualUser = userService.findByUsername(null);
         assertNull(actualUser);
-        verifyZeroInteractions(userDAO);
+        verifyZeroInteractions(userRepository);
     }
 
     @Test
@@ -124,14 +121,14 @@ class UserServiceImplTest {
         updatedUser.setName(username);
         updatedUser.setPassword(oldPassword);
 
-        when(userDAO.getById(id)).thenReturn(existingUser);
+        when(userRepository.getUserByUserId(id)).thenReturn(existingUser);
         when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
         userService.update(id, updatedUser);
 
-        verify(userDAO, times(1)).getById(id);
-        verify(userDAO, times(1)).update(updatedUser);
-        verifyNoMoreInteractions(userDAO);
+        verify(userRepository, times(1)).getUserByUserId(id);
+        verify(userRepository, times(1)).save(updatedUser);
+        verifyNoMoreInteractions(userRepository);
 
         assertEquals(existingUser.getUsername(), updatedUser.getUsername());
         assertEquals(existingUser.getPassword(), updatedUser.getPassword());
@@ -154,14 +151,14 @@ class UserServiceImplTest {
         updatedUser.setName(username);
         updatedUser.setPassword(newPassword);
 
-        when(userDAO.getById(id)).thenReturn(existingUser);
+        when(userRepository.getUserByUserId(id)).thenReturn(existingUser);
         when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
         userService.update(id, updatedUser);
 
-        verify(userDAO, times(1)).getById(id);
-        verify(userDAO, times(1)).update(updatedUser);
-        verifyNoMoreInteractions(userDAO);
+        verify(userRepository, times(1)).getUserByUserId(id);
+        verify(userRepository, times(1)).save(updatedUser);
+        verifyNoMoreInteractions(userRepository);
 
         assertEquals(existingUser.getUsername(), updatedUser.getUsername());
         assertNotEquals(existingUser.getPassword(), updatedUser.getPassword());

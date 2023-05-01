@@ -19,8 +19,6 @@ public interface UserService {
 
     User findByUsername(Principal principal);
 
-//    void addDefaultUser();
-
     void update(int id, User user);
 
     User passwordCoder(User user);
