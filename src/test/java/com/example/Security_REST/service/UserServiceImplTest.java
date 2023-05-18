@@ -18,25 +18,22 @@ import static org.mockito.Mockito.*;
 
 
 class UserServiceImplTest {
-    @Mock
-    private PasswordEncoder passwordEncoder;
-    @Mock
-    private UserRepository userRepository;
 
-    private UserService userService;
+    private final PasswordEncoder passwordEncoder=Mockito.mock(PasswordEncoder.class);
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        userService = new UserServiceImpl(userRepository, passwordEncoder);
-    }
+    private final UserRepository userRepository=Mockito.mock(UserRepository.class);
+
+    private final UserService testClass=Mockito.spy(new UserServiceImpl(userRepository,passwordEncoder) {
+    });
+
 
     @Test
     public void findAll() {
         List<User> usersFromMock = new ArrayList<>();
         Mockito.when(userRepository.findAll()).thenReturn(usersFromMock);
-        List<User> users = userService.findAll();
+        List<User> users = testClass.findAll();
         assertEquals(users, usersFromMock);
+        verify(testClass, times(1)).findAll();
     }
 
     @Test
@@ -46,8 +43,9 @@ class UserServiceImplTest {
         expectedUser.setUserId(entityId);
         when(userRepository.getUserByUserId(entityId)).thenReturn(expectedUser);
 
-        User actualUser = userService.getById(entityId);
+        User actualUser = testClass.getById(entityId);
         assertEquals(expectedUser, actualUser);
+        verify(testClass, times(1)).getById(entityId);
     }
 
     @Test
@@ -59,23 +57,25 @@ class UserServiceImplTest {
 
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
-        userService.save(user);
+        testClass.save(user);
 
         verify(passwordEncoder, times(1)).encode("password");
         verify(userRepository, times(1)).save(argThat(savedUser -> savedUser.getName().equals("user") &&
                 (savedUser.getAge() == 12) &&
                 savedUser.getPassword().equals("encodedPassword")));
         verifyNoMoreInteractions(passwordEncoder, userRepository);
+        verify(testClass, times(1)).save(user);
     }
 
 
     @Test
     public void deleteById() {
         int id = 1;
-        userService.deleteById(id);
+        testClass.deleteById(id);
 
         verify(userRepository, times(1)).deleteByUserId(id);
         verifyNoMoreInteractions(userRepository);
+        verify(testClass, times(1)).deleteById(id);
     }
 
     @Test
@@ -88,18 +88,19 @@ class UserServiceImplTest {
         expectedUser.setName(username);
         when(userRepository.findByName(username)).thenReturn(expectedUser);
 
-        User actualUser = userService.findByUsername(principal);
+        User actualUser = testClass.findByUsername(principal);
 
         verify(userRepository, times(1)).findByName(username);
         verifyNoMoreInteractions(userRepository);
 
         assertNotNull(actualUser);
         assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+        verify(testClass, times(1)).findByUsername(principal);
     }
 
     @Test
     public void findByUsernameWithNullPrincipal() {
-        User actualUser = userService.findByUsername(null);
+        User actualUser = testClass.findByUsername(null);
         assertNull(actualUser);
         verifyZeroInteractions(userRepository);
     }
@@ -124,7 +125,7 @@ class UserServiceImplTest {
         when(userRepository.getUserByUserId(id)).thenReturn(existingUser);
         when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
-        userService.update(id, updatedUser);
+        testClass.update(id, updatedUser);
 
         verify(userRepository, times(1)).getUserByUserId(id);
         verify(userRepository, times(1)).save(updatedUser);
@@ -132,6 +133,7 @@ class UserServiceImplTest {
 
         assertEquals(existingUser.getUsername(), updatedUser.getUsername());
         assertEquals(existingUser.getPassword(), updatedUser.getPassword());
+        verify(testClass, times(1)).update(id, updatedUser);
     }
 
     @Test
@@ -154,7 +156,7 @@ class UserServiceImplTest {
         when(userRepository.getUserByUserId(id)).thenReturn(existingUser);
         when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
-        userService.update(id, updatedUser);
+        testClass.update(id, updatedUser);
 
         verify(userRepository, times(1)).getUserByUserId(id);
         verify(userRepository, times(1)).save(updatedUser);
@@ -163,6 +165,7 @@ class UserServiceImplTest {
         assertEquals(existingUser.getUsername(), updatedUser.getUsername());
         assertNotEquals(existingUser.getPassword(), updatedUser.getPassword());
         assertEquals(newPassword, updatedUser.getPassword());
+        verify(testClass, times(1)).update(id, updatedUser);
     }
 
     @Test
@@ -173,11 +176,13 @@ class UserServiceImplTest {
 
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
-        User result = userService.passwordCoder(user);
+        User result = testClass.passwordCoder(user);
 
         verify(passwordEncoder, times(1)).encode("password");
         verifyNoMoreInteractions(passwordEncoder);
 
         assertEquals("encodedPassword", result.getPassword());
+        verify(testClass, times(1)).passwordCoder(user);
+
     }
 }
