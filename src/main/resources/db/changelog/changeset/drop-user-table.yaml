@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-user
+      author: Vera
+      preConditions:
+        onFail: MARK_RAN
+        tableExists:
+          tableName: users
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: users
