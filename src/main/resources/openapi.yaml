@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: Swagger Site - OpenAPI 3.0
+  description: |-
+    This is an example of a CRUD server application based on the Open API 3.0 specification.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Dev server
+tags:
+  - name: User
+    description: Operations about user
+paths:
+  /api/users:
+    post:
+      tags:
+        - User
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json: {}
+        "default":
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - User
+      summary: Get all users
+      operationId: allUsers
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "default":
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/users/{id}:
+    get:
+      tags:
+        - User
+      summary: Get a user by his id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "default":
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - User
+      summary: Edit a user by his id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json: {}
+        "default":
+          description: Все нестандартное Delete a user by his id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - User
+      summary: Delete a user by his id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json: {}
+        "default":
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/user:
+    get:
+      tags:
+        - User
+      summary: Get a user by his name
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "default":
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+          example: 10
+        name:
+          type: string
+          example: John
+          maxLength: 100
+          minLength: 2
+        surname:
+          type: string
+          example: James
+          maxLength: 100
+          minLength: 2
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: user
+          minLength: 2
+        age:
+          type: integer
+          format: int32
+          example: 26
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        enabled:
+          type: boolean
+        credentialsNonExpired:
+          type: boolean
+        accountNonExpired:
+          type: boolean
+        accountNonLocked:
+          type: boolean
+        authorities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrantedAuthority'
+        username:
+          type: string
+          example: "John"
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        role:
+          type: string
+          example: "ROLE_USER"
+        authority:
+          type: string
+    Error:
+      type: object
+      properties:
+        info:
+          type: string
+    GrantedAuthority:
+      type: object
+      properties:
+        authority:
+          type: string
