@@ -15,7 +15,7 @@ databaseChangeLog:
                       references: users(user_id)
                 - column:
                     name: role_id
-                    type: int
+                    type: bigint
                     constraints:
                       primaryKey: true
                       foreignKeyName: role_fk

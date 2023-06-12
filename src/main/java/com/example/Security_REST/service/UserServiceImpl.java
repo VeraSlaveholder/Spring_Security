@@ -1,7 +1,9 @@
 package com.example.Security_REST.service;
 
+import com.example.Security_REST.DAO.UserDAOJOOQImpl;
 import com.example.Security_REST.DAO.UserRepository;
 import com.example.Security_REST.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserDAOJOOQImpl userDAO;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDAOJOOQImpl userDAO) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userDAO = userDAO;
     }
 
     @Override
@@ -32,34 +37,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userDAO.findAll();
     }
 
     @Override
     public User getById(int id) {
-        return userRepository.getUserByUserId(id);
+        return userDAO.getById(id);
     }
 
     @Override
     public void save(User user) {
-        userRepository.save(passwordCoder(user));
+        userDAO.save(passwordCoder(user));
     }
 
     @Override
     public void update(int id, User user) {
-        String oldPassword = userRepository.getUserByUserId(id).getPassword();
+        String oldPassword = userDAO.getById(id).getPassword();
         if (oldPassword.equals(user.getPassword())) {
             user.setPassword(oldPassword);
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         user.setUserId(id);
-        userRepository.save(user);
+        userDAO.update(user);
     }
 
     @Override
     public void deleteById(int id) {
-        userRepository.deleteByUserId(id);
+        userDAO.deleteById(id);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         String name = principal.getName();
-        return userRepository.findByName(name);
+        return userDAO.findByUsername(name);
     }
 
     @Override

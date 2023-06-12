@@ -1,6 +1,7 @@
 package com.example.Security_REST.service;
 
 import com.example.Security_REST.DAO.RoleRepository;
+import com.example.Security_REST.DAO.RoleRepositoryJOOQ;
 import com.example.Security_REST.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,21 @@ import java.util.Set;
 @Transactional
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final RoleRepositoryJOOQ repositoryJOOQ;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, RoleRepositoryJOOQ repositoryJOOQ) {
         this.roleRepository = roleRepository;
+        this.repositoryJOOQ = repositoryJOOQ;
     }
 
     @Override
     public List<Role> findAllRole() {
-        return roleRepository.findAll();
+        return repositoryJOOQ.findAllRoles();
     }
 
     @Override
     public Set<Role> findByIdRoles(List<Integer> roles) {
-        return new HashSet<>(roleRepository.findAllById(roles));
+        return new HashSet<>(repositoryJOOQ.findAllById(roles));
     }
 }
