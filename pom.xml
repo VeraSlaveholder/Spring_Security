@@ -67,6 +67,11 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -107,6 +112,37 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+<!--            OpenApi-->
+<!--            <plugin>-->
+<!--                <groupId>org.openapitools</groupId>-->
+<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--                <version>5.2.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>core</id>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>src/main/resources/openapi/core.yaml</inputSpec>-->
+<!--                            <output>target/generated-sources/openapi</output>-->
+<!--                            <generatorName>spring</generatorName>-->
+<!--                            <library>spring-cloud</library>-->
+<!--                            <apiPackage>com.example.Security_REST.controller</apiPackage>-->
+<!--                            <modelPackage>com.example.Security_REST.model</modelPackage>-->
+<!--                            <generateSupportingFiles>false</generateSupportingFiles>-->
+<!--                            <configOptions>-->
+<!--                                <openApiNullable>false</openApiNullable>-->
+<!--                                <interfaceOnly>true</interfaceOnly>-->
+<!--                                <useTags>true</useTags>-->
+<!--                            </configOptions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!--            JOOQ-->
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
