@@ -1,5 +1,6 @@
 package com.example.Security_REST.model;
 
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +19,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
-    @NotEmpty(message = "Name should not be empty")
+//    @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     private String name;
 
-    @NotEmpty(message = "Surname should not be empty")
+//    @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 100, message = "Surname should be between 2 and 100 characters")
     private String surname;
 
@@ -30,14 +31,16 @@ public class User implements UserDetails {
     @Max(value = 127, message = "Age should be >= 0 & < 128")
     private int age;
 
-    @NotEmpty(message = "Surname should not be empty")
+//    @NotEmpty(message = "Surname should not be empty")
     @Email
     private String email;
 
-    @NotEmpty(message = "Password cannot be empty")
+//    @NotEmpty(message = "Password cannot be empty")
     @Size(min = 2, message = "Password should be greater then 2 symbols")
     private String password;
 
+    private String secret;
+    private boolean isUsing2FA;
     @NotEmpty(message = "The role cannot be omitted")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -46,6 +49,7 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     public User() {
+        this.secret = Base32.random();
     }
 
     public User(String name, String surname, int age, String email, String password, Set<Role> roles) {
@@ -55,6 +59,23 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.secret = Base32.random();
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public boolean isUsing2FA() {
+        return isUsing2FA;
+    }
+
+    public void setUsing2FA(boolean using2FA) {
+        isUsing2FA = using2FA;
     }
 
     public void setPassword(String password) {
@@ -148,5 +169,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
