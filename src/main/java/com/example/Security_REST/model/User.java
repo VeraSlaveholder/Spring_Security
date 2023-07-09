@@ -40,6 +40,7 @@ public class User implements UserDetails {
     private String password;
 
     private String secret;
+    @Column(name = "is_using2fa")
     private boolean isUsing2FA;
     @NotEmpty(message = "The role cannot be omitted")
     @ManyToMany(fetch = FetchType.EAGER)
