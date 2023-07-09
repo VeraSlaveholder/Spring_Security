@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: addColumn
+      author: Vera
+      changes:
+        - addColumn:
+              tableName: users
+              columns:
+                - column:
+                    name: secret
+                    type: varchar(200)

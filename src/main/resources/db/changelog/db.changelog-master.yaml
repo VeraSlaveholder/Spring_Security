@@ -1,11 +1,13 @@
 databaseChangeLog: #параметр в котором находятся миграции
   - include: # список активных миграций
-      file: db/changelog/changeset/create-user-table.yaml # путь к файлу миграции
+      file: db/changelog/changeset/1.0/create-user-table.yaml # путь к файлу миграции
   - include:
-      file: db/changelog/changeset/create-role-table.yaml
+      file: db/changelog/changeset/1.0/create-role-table.yaml
   - include:
-      file: db/changelog/changeset/create-users-roles-table.yaml
+      file: db/changelog/changeset/1.0/create-users-roles-table.yaml
   - include:
-      file: db/changelog/changeset/drop-user-table.yaml
+      file: db/changelog/changeset/1.1/drop-user-table.yaml
   - include:
-      file: db/changelog/changeset/create-users-table.yaml
+      file: db/changelog/changeset/1.1/create-users-table.yaml
+  - include:
+      file: db/changelog/changeset/1.2/add-сolumns.yaml
