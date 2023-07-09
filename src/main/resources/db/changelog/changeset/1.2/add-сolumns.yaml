@@ -10,5 +10,5 @@ databaseChangeLog:
                     name: secret
                     type: varchar(200)
                 - column:
-                    name: isUsing2FA
+                    name: is_using2fa
                     type: BOOLEAN
