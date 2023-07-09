@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: addColumn
+      id: addColumns
       author: Vera
       changes:
         - addColumn:
@@ -9,3 +9,6 @@ databaseChangeLog:
                 - column:
                     name: secret
                     type: varchar(200)
+                - column:
+                    name: isUsing2FA
+                    type: BOOLEAN
