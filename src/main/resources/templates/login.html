@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+<h1>Login</h1>
+<form action="/login" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="code">Google Authenticator Verification Code:</label>
+        <input type="number" id="code" name="code" >
+    </div>
+    <div>
+        <button type="submit">Sign In</button>
+    </div>
+    <br/>
+    <a class="btn btn-default" th:href="@{/registration}">Sign Up</a>
+    <br/>
+</form>
+</body>
+</html>
